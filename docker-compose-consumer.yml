@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  consumer:
+    image: consumer-connector:latest
+    ports:
+      - "29191:29191"
+      - "29193:29193"
+      - "29194:29194"
+      - "29291:29291"
+      - "29192:29192"
+      - "29195:29195"
+    environment:
+      - EDC_KEYSTORE_PASSWORD=123456
+    volumes:
+      - ./consumer/resources/configuration:/app/configuration
+      - ./consumer/resources/certs:/app/certs
+    networks:
+      - edc_network
+
+networks:
+  edc_network:
+    driver: bridge

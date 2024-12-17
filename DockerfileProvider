@@ -1,0 +1,15 @@
+FROM gradle:7.6-jdk17 AS build
+
+WORKDIR /app
+
+COPY . /app
+
+RUN ./gradlew :provider-connector:build
+
+FROM openjdk:17-jdk-alpine
+
+WORKDIR /app
+
+COPY --from=build /app/provider/connector/build/libs/connector.jar /app/connector.jar
+
+CMD ["java", "-Dedc.keystore=/app/certs/cert.pfx", "-Dedc.keystore.password=${EDC_KEYSTORE_PASSWORD}", "-Dedc.fs.config=/app/configuration/provider-configuration.properties", "-jar", "/app/connector.jar"]

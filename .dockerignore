@@ -1,0 +1,5 @@
+provider/connector/build
+provider/resources
+
+consumer/connector/build
+consumer/resources
