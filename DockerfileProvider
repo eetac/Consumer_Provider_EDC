@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 gradle:7.6-jdk17 AS build
+FROM gradle:7.6-jdk17 AS build
 
 WORKDIR /app
 
@@ -6,7 +6,7 @@ COPY . /app
 
 RUN ./gradlew :provider-connector:build
 
-FROM --platform=linux/amd64 openjdk:17-jdk-alpine
+FROM openjdk:17-jdk-alpine
 
 WORKDIR /app
 
