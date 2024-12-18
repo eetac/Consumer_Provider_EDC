@@ -35,7 +35,6 @@ jobs:
       with:
         context: ./
         file: ./DockerfileProvider
-        platforms: linux/arm64
         push: true
         tags: ${{ secrets.DOCKER_HUB_USERNAME }}/agrixels:${{ github.event.head_commit.message }}
 
