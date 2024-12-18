@@ -1,46 +1,15 @@
-# Etapa 1: Build de la aplicación
-FROM ubuntu:22.04 AS build
-
-# Instalar dependencias necesarias
-RUN apt-get update && apt-get install -y \
-    openjdk-17-jdk \
-    curl \
-    unzip \
-    && rm -rf /var/lib/apt/lists/*
-
-# Configurar Gradle manualmente
-RUN curl -sL https://services.gradle.org/distributions/gradle-7.6-bin.zip -o gradle.zip && \
-    unzip gradle.zip -d /opt/ && \
-    rm gradle.zip
-ENV PATH="/opt/gradle-7.6/bin:$PATH"
+FROM gradle:7.6-jdk17 AS build
 
 WORKDIR /app
 
-# Copiar todos los archivos al contenedor
 COPY . /app
 
-# Dar permisos al wrapper de Gradle
-RUN chmod +x ./gradlew
-
-# Compilar el proyecto
 RUN ./gradlew :provider-connector:build
 
-# Etapa 2: Preparar la imagen final
-FROM ubuntu:22.04
-
-# Instalar JDK 17
-RUN apt-get update && apt-get install -y \
-    openjdk-17-jdk \
-    && rm -rf /var/lib/apt/lists/*
+FROM openjdk:17-jdk-alpine
 
 WORKDIR /app
 
-# Copiar el artefacto generado de la etapa anterior
 COPY --from=build /app/provider/connector/build/libs/connector.jar /app/connector.jar
 
-# Comando de ejecución
-CMD ["java", \
-     "-Dedc.keystore=/app/certs/cert.pfx", \
-     "-Dedc.keystore.password=${EDC_KEYSTORE_PASSWORD}", \
-     "-Dedc.fs.config=/app/configuration/provider-configuration.properties", \
-     "-jar", "/app/connector.jar"]
+CMD ["java", "-Dedc.keystore=/app/certs/cert.pfx", "-Dedc.keystore.password=${EDC_KEYSTORE_PASSWORD}", "-Dedc.fs.config=/app/configuration/provider-configuration.properties", "-jar", "/app/connector.jar"]
