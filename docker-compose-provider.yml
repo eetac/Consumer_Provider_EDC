@@ -1,8 +1,6 @@
-version: '3.8'
-
 services:
   provider:
-    image: provider-connector:latest
+    image: eetac/agrixels:latest
     ports:
       - "19191:19191"
       - "19193:19193"
@@ -20,4 +18,3 @@ services:
 
 networks:
   edc_network:
-    driver: bridge
