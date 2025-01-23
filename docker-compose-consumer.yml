@@ -1,8 +1,8 @@
-version: '3.8'
 
 services:
   consumer:
-    image: consumer-connector:latest
+    image: itziarmensaupc/edcconsumer:latest
+    platform: linux/amd64
     ports:
       - "29191:29191"
       - "29193:29193"

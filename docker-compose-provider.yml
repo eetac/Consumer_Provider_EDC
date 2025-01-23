@@ -1,6 +1,7 @@
 services:
   provider:
-    image: eetac/agrixels:latest
+    image: itziarmensaupc/edcprovider:latest
+    platform: linux/amd64
     ports:
       - "19191:19191"
       - "19193:19193"
